@@ -31,24 +31,35 @@
 html,body{margin:0}
 img{max-width:100%}
 [hidden]{display:none!important}
-html{scroll-padding-top:20px}
+html{scroll-padding-top:84px}
 body{background:var(--bg);color:var(--ink);font-family:var(--sans);overflow-x:hidden}
 .wrap{max-width:1140px;margin:0 auto;padding-left:var(--gut-l);padding-right:var(--gut-r);position:relative}
 button{font:inherit;color:inherit}
 :focus-visible{outline:2.5px solid var(--acc);outline-offset:3px;border-radius:8px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .serif{font-family:var(--serif);font-weight:400}
-main{position:relative;overflow:hidden;padding-bottom:100px}
+main{position:relative;overflow-x:hidden;overflow-x:clip;padding-bottom:100px}
 
 
 /* ---------- hero ---------- */
 .haze{position:absolute;inset:0 0 auto;height:860px;pointer-events:none;transition:background .4s;
   background:radial-gradient(38% 46% at 26% 4%,var(--g1),transparent 72%),radial-gradient(38% 46% at 74% 4%,var(--g2),transparent 72%),radial-gradient(55% 55% at 50% 14%,var(--g3),transparent 76%)}
-nav.top{display:flex;justify-content:space-between;align-items:center;padding-block:22px}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;transition:background .3s,box-shadow .3s}
+.topbar.scrolled{background:rgba(250,250,247,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 1px 0 var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:51;background:var(--bg)}
+nav.top{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-block:22px;transition:padding .3s}
+.topbar.scrolled nav.top{padding-block:12px}
+.brand{border:0;background:none;padding:0;cursor:pointer;color:var(--ink);white-space:nowrap}
+@media (max-width:420px){nav.top .brand{font-size:22px}}
 nav.top .serif{font-size:26px;font-style:italic}
 .links{display:flex;gap:4px;align-items:center}
 .links button{border:0;background:transparent;padding:8px 12px;border-radius:999px;font-weight:600;font-size:14px;cursor:pointer}
+.links button{position:relative;transition:background .25s,box-shadow .25s}
 .links button:hover{background:rgba(255,255,255,.65)}
+.links .nl::after{content:"";position:absolute;left:50%;bottom:2px;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--ink);scale:0;transition:scale .25s cubic-bezier(.3,1.6,.5,1)}
+.links .nl[aria-current="true"]{background:#fff;box-shadow:0 0 0 1px var(--line)}
+.links .nl[aria-current="true"]::after{scale:1}
+.links .cta[aria-current="true"]{box-shadow:0 0 0 3px var(--p2)}
 .links .cta{background:var(--ink);color:#fff}
 .links .cta:hover{background:#2c2c33}
 @media (max-width:760px){.links .nl{display:none}}
@@ -119,6 +130,11 @@ h2 .serif{font-style:italic;letter-spacing:-.01em}
 .xp-card h3{margin:0;font-size:22px;letter-spacing:-.02em;line-height:1.15}
 .xp-card p{margin:4px 0 0;color:#BDBDC6;font-size:14px}
 .xp-card .pill{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:600;position:relative;z-index:1}
+.xpm{position:relative;z-index:1;display:grid;gap:8px;margin-top:4px}
+.xpm div{display:grid;grid-template-columns:62px minmax(0,1fr);gap:12px;align-items:center;padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.08);transition:background .25s,translate .25s}
+.xpm div:hover{background:rgba(255,255,255,.15);translate:4px 0}
+.xpm b{font-family:var(--serif);font-style:italic;font-weight:400;font-size:32px;line-height:1;color:#fff;font-variant-numeric:tabular-nums}
+.xpm span{font-size:12.5px;color:#CFCFD8;line-height:1.35}
 .xp-card .pill i{width:8px;height:8px;border-radius:50%;background:#3DD68C}
 .xp-list{background:#fff;border-radius:24px;box-shadow:0 0 0 1px var(--line);padding:8px 24px}
 .xp-list>div{display:grid;grid-template-columns:34px minmax(0,1fr);gap:14px;padding:16px 0;border-top:1px solid var(--line)}
@@ -168,6 +184,23 @@ h2 .serif{font-style:italic;letter-spacing:-.01em}
 .card-in p{margin:0 0 10px;font-size:15px;line-height:1.55;max-width:60ch}
 .card-in ul{margin:0 0 14px;padding-left:18px;font-size:14px;line-height:1.55}
 .card-in li{margin-bottom:4px}
+.more{margin-top:16px;display:inline-flex;align-items:center;gap:8px;border:0;background:var(--ink);color:#fff;font:700 13.5px var(--sans);padding:10px 16px;border-radius:999px;cursor:pointer;transition:gap .25s,transform .2s}
+.more:hover{gap:13px;transform:translateY(-1px)}
+.pm{position:fixed;inset:0;z-index:90;display:grid;place-items:center;background:rgba(20,20,32,.5);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:20px max(16px,env(safe-area-inset-right,0px)) 20px max(16px,env(safe-area-inset-left,0px))}
+.pm-panel{background:#fff;border-radius:28px;width:min(640px,100%);max-height:88vh;overflow:auto;box-shadow:0 40px 80px -30px rgba(0,0,0,.45);animation:pm-in .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes pm-in{from{opacity:0;translate:0 30px;scale:.96}to{opacity:1;translate:0 0;scale:1}}
+.pm-head{position:relative;background:var(--c);padding:56px 26px 24px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:end}
+.pm-head small{font-size:12.5px;font-weight:600;color:#2d2d33}
+.pm-head h3{margin:4px 0 10px;font-size:clamp(22px,4vw,30px);letter-spacing:-.03em;line-height:1.1;text-wrap:balance}
+.pm-role{display:inline-block;background:rgba(255,255,255,.7);border-radius:999px;padding:5px 12px;font-size:12.5px;font-weight:700}
+.pm-x{position:absolute;top:14px;right:14px;width:38px;height:38px;border-radius:50%;border:0;background:rgba(255,255,255,.8);font-size:22px;line-height:1;cursor:pointer}
+.pm-x:hover{background:#fff}
+.pm-body{padding:24px 26px 28px}
+.pm-body p{font-size:16px;line-height:1.6;margin:0 0 22px}
+.pm-body h4{margin:0 0 10px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.pm-body ul{margin:0 0 22px;padding-left:18px;font-size:15px;line-height:1.6}
+.pm-body li{margin-bottom:6px}
+.pm-body .tags span{background:var(--bg);box-shadow:0 0 0 1px var(--line)}
 .tags{display:flex;flex-wrap:wrap;gap:6px}
 .tags span{background:rgba(255,255,255,.6);border-radius:999px;padding:5px 10px;font-size:12px;font-weight:600}
 .empty{padding:30px;border:1.5px dashed var(--line);border-radius:24px;color:var(--muted);text-align:center}
@@ -325,19 +358,23 @@ h2 .serif{font-style:italic;letter-spacing:-.01em}
 </style>
 </head>
 <body>
-<main>
+<main id="top">
   <div class="haze"></div>
+  <header class="topbar" id="topbar">
+    <div class="wrap">
+      <nav class="top" aria-label="Sections">
+        <button class="brand serif" data-go="top">Jeuel's Portfolio</button>
+        <div class="links">
+          <button class="nl" data-go="work">Work</button>
+          <button class="nl" data-go="projects">Projects</button>
+          <button class="nl" data-go="skills">Skills</button>
+          <button class="nl" data-go="about">About</button>
+          <button class="cta" data-go="connect">Connect</button>
+        </div>
+      </nav>
+    </div>
+  </header>
   <div class="wrap">
-    <nav class="top">
-      <div class="serif">Jeuel Mae</div>
-      <div class="links">
-        <button class="nl" data-go="work">Work</button>
-        <button class="nl" data-go="projects">Projects</button>
-        <button class="nl" data-go="skills">Skills</button>
-        <button class="nl" data-go="about">About</button>
-        <button class="cta" data-go="connect">Connect</button>
-      </div>
-    </nav>
 
     <!-- 1 · Hero -->
     <div class="hero">
@@ -371,6 +408,11 @@ h2 .serif{font-style:italic;letter-spacing:-.01em}
         <div class="xp-card">
           <div><h3>Automation Engineer</h3><p>Techflow.ai GmbH</p></div>
           <span class="pill"><i></i>2026 to present</span>
+          <div class="xpm">
+            <div><b>05</b><span>AI agents working together in one content pipeline</span></div>
+            <div><b>8-pt</b><span>quality score every AI draft has to pass</span></div>
+            <div><b>03</b><span>customer email journeys automated for Shopify</span></div>
+          </div>
         </div>
         <div class="xp-list" id="xp"></div>
       </div>
@@ -484,19 +526,19 @@ const XP=[
  {h:"Shopify storefronts & emails",i:"cart",d:"Customized storefronts and landing pages in Liquid, plus abandoned-cart, review-request and customer-care email flows."}
 ];
 const PROJECTS=[
- {t:"Cebu City Jail Annex records system",org:"Thesis · Full-stack",cat:"full",m:"4.78",ml:"Ease of use /5",
+ {t:"Cebu City Jail Annex records system",org:"Thesis · Full-stack",r:"Full-Stack Developer (Thesis)",cat:"full",m:"4.78",ml:"Ease of use /5",
   s:"A secure data management system for a city jail annex, from biometric identification to encrypted, audited records.",
   p:["React and Material UI front end for administrative workflows.","Fingerprint and facial recognition with role-based access (RBAC) and OCR digitization.","Local LAN architecture with AES-256, TLS and audit logging.","Alpha, Beta and UAT test plans; 4.75/5 for user confidence."],
   tg:["React","Material UI","Biometrics","OCR","AES-256"]},
- {t:"VaultPass password manager",org:"Mobile",cat:"mobile",m:"PIN",ml:"Locked + masked",
+ {t:"VaultPass password manager",org:"Mobile",r:"Mobile App Developer",cat:"mobile",m:"PIN",ml:"Locked + masked",
   s:"A cross-platform password manager built in Flutter, focused on privacy and sync.",
   p:["Firebase Authentication plus a PIN-based UI lock.","Sensitive data masking and automated clipboard handling.","Real-time search with sync across devices."],
   tg:["Flutter","Firebase"]},
- {t:"Bitebook digital recipe book",org:"Full-stack web",cat:"full",m:"PHP",ml:"+ MySQL",
+ {t:"Bitebook digital recipe book",org:"Full-stack web",r:"Full-Stack Developer",cat:"full",m:"PHP",ml:"+ MySQL",
   s:"A recipe web app with filtering and ingredient matching, so you can cook with what you already have.",
   p:["Responsive interface in JavaScript, HTML and CSS.","PHP sessions, secure authentication and SQL-based filtering.","Relational MySQL schema linking users and recipe metadata."],
   tg:["JavaScript","PHP","MySQL"]},
- {t:"Automatic medicine dispenser",org:"Hardware",cat:"hw",m:"03",ml:"Users at once",
+ {t:"Automatic medicine dispenser",org:"Hardware",r:"Hardware Designer & Programmer",cat:"hw",m:"03",ml:"Users at once",
   s:"A scheduled dispenser designed in Proteus, with a keypad, LCD and alarm.",
   p:["Control logic runs 3 dispensers for 3 users with personal schedules.","Debugged and refactored the source for readability."],
   tg:["Proteus","Embedded C","Circuit design"]}
@@ -555,14 +597,29 @@ const stack=$('stack');
 stack.innerHTML=PROJECTS.map((p,i)=>`<article class="card${i===0?' open':''}${i===PROJECTS.length-1?' last':''}" style="--c:${P(i)}" data-i="${i}">
   <button class="card-head" aria-expanded="${i===0}"><div><small>${esc(p.org)}</small><h3>${esc(p.t)}</h3></div>
   <div class="metric"><b>${p.m}</b><span>${esc(p.ml)}</span></div></button>
-  <div class="card-body"><div><div class="card-in"><p>${esc(p.s)}</p><ul>${p.p.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
-  <div class="tags">${p.tg.map(x=>`<span>${esc(x)}</span>`).join('')}</div></div></div></div></article>`).join('');
+  <div class="card-body"><div><div class="card-in"><p>${esc(p.s)}</p>
+  <div class="tags">${p.tg.map(x=>`<span>${esc(x)}</span>`).join('')}</div>
+  <button class="more" type="button" data-proj="${i}" aria-haspopup="dialog">See more <span aria-hidden="true">→</span></button></div></div></div></article>`).join('');
+/* project details pop-up */
+(function(){const pm=document.createElement('div');pm.className='pm';pm.hidden=true;pm.setAttribute('role','dialog');pm.setAttribute('aria-modal','true');pm.setAttribute('aria-labelledby','pm-t');
+  pm.innerHTML=`<div class="pm-panel"><div class="pm-head"><div><small id="pm-org"></small><h3 id="pm-t"></h3><span class="pm-role" id="pm-r"></span></div>
+    <div class="metric"><b id="pm-m"></b><span id="pm-ml"></span></div><button class="pm-x" type="button" aria-label="Close">×</button></div>
+    <div class="pm-body"><p id="pm-s"></p><h4>What I built</h4><ul id="pm-p"></ul><h4>Built with</h4><div class="tags" id="pm-tg"></div></div></div>`;
+  document.body.appendChild(pm);let back=null;
+  const close=()=>{pm.hidden=true;document.documentElement.style.overflow='';if(back)back.focus()};
+  stack.addEventListener('click',e=>{const b=e.target.closest('[data-proj]');if(!b)return;const i=+b.dataset.proj,p=PROJECTS[i];back=b;
+    pm.querySelector('.pm-head').style.setProperty('--c',P(i));
+    $('pm-org').textContent=p.org;$('pm-t').textContent=p.t;$('pm-r').textContent=p.r;$('pm-m').textContent=p.m;$('pm-ml').textContent=p.ml;$('pm-s').textContent=p.s;
+    $('pm-p').innerHTML=p.p.map(x=>`<li>${esc(x)}</li>`).join('');$('pm-tg').innerHTML=p.tg.map(x=>`<span>${esc(x)}</span>`).join('');
+    pm.hidden=false;document.documentElement.style.overflow='hidden';pm.querySelector('.pm-panel').scrollTop=0;pm.querySelector('.pm-x').focus()});
+  pm.addEventListener('click',e=>{if(e.target===pm||e.target.closest('.pm-x'))close()});
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!pm.hidden)close()});})();
 function setOpen(c){stack.querySelectorAll('.card').forEach(x=>{const o=x===c;x.classList.toggle('open',o);x.querySelector('.card-head').setAttribute('aria-expanded',o)})}
 stack.addEventListener('click',e=>{const h=e.target.closest('.card-head');if(!h)return;const c=h.parentElement;setOpen(c.classList.contains('open')?null:c)});
 
 /* shared */
 document.addEventListener('click',e=>{
-  const g=e.target.closest('[data-go]');if(g){const t=$(g.dataset.go);if(t)t.scrollIntoView({behavior:'smooth',block:'start'})}
+  const g=e.target.closest('[data-go]');if(g){if(g.dataset.go==='top'){scrollTo({top:0,behavior:'smooth'})}else{const t=$(g.dataset.go);if(t)t.scrollIntoView({behavior:'smooth',block:'start'})}}
   const c=e.target.closest('[data-copy]');if(c){const o=c.innerHTML;const done=()=>{c.textContent='Copied ✓';setTimeout(()=>c.innerHTML=o,1500)};
     try{navigator.clipboard.writeText(c.dataset.copy).then(done,()=>sel(c))}catch(_){sel(c)}}
 });
@@ -611,6 +668,18 @@ function runIntro(force){
 }
 runIntro(false);
 
+/* sticky header: solid background once scrolled, and highlight the section in view */
+(function(){const bar=$('topbar'),ids=['work','projects','skills','about','connect'],btns={};
+  document.querySelectorAll('.links [data-go]').forEach(b=>btns[b.dataset.go]=b);
+  let ticking=false;
+  function update(){ticking=false;bar.classList.toggle('scrolled',scrollY>8);
+    const line=innerHeight*.35;let cur=null;
+    for(const id of ids){const el=$(id);if(el&&el.getBoundingClientRect().top<=line)cur=id}
+    if(innerHeight+scrollY>=document.documentElement.scrollHeight-4)cur='connect';
+    for(const id in btns){if(id===cur)btns[id].setAttribute('aria-current','true');else btns[id].removeAttribute('aria-current')}}
+  addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(update)}},{passive:true});
+  addEventListener('resize',update);update();})();
+
 /* hero name: typed in once the intro has finished */
 (function(){
   const el=$('name');
@@ -650,12 +719,13 @@ runIntro(false);
   G('#ints',':scope > .int','rv-pop',110);
   G('#connect',':scope > h2, :scope > p, :scope > .hbtns','rv-up',120);
   function count(b,delay){const m=b.textContent.match(/^(\D*)([\d.]+)(\D*)$/);if(!m)return;const end=+m[2];
-    b.textContent=m[1]+'0'+m[3];setTimeout(()=>{const t0=performance.now();
-      const tick=t=>{const k=Math.min(1,(t-t0)/900),v=Math.round(end*(1-Math.pow(1-k,3)));b.textContent=m[1]+v+m[3];if(k<1)requestAnimationFrame(tick)};
+    b.textContent=m[1]+'0'.repeat(m[2][0]==='0'?m[2].length:1)+m[3];setTimeout(()=>{const t0=performance.now();
+      const pad=m[2][0]==='0'?m[2].length:0;const tick=t=>{const k=Math.min(1,(t-t0)/900),v=String(Math.round(end*(1-Math.pow(1-k,3)))).padStart(pad,'0');b.textContent=m[1]+v+m[3];if(k<1)requestAnimationFrame(tick)};
       requestAnimationFrame(tick)},delay)}
   const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;
     (roots.get(e.target)||[]).forEach(el=>el.classList.add('in'));
     if(e.target.classList.contains('big3'))e.target.querySelectorAll('b').forEach((b,i)=>count(b,250+i*100));
+    if(e.target.classList.contains('xp-card'))e.target.querySelectorAll('.xpm b').forEach((b,i)=>count(b,300+i*120));
     io.unobserve(e.target)}),{rootMargin:'0px 0px -10% 0px',threshold:0});
   roots.forEach((_,r)=>io.observe(r));
 })();
