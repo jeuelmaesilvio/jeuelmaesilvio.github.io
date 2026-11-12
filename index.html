@@ -281,6 +281,43 @@ h2 .serif{font-style:italic;letter-spacing:-.01em}
 .contact .hbtns{position:relative;justify-content:center}
 .foot{text-align:center;color:var(--muted);font-size:13px;margin-top:40px;position:relative}
 
+/* hero name typing */
+.rot .ch{position:relative}
+.js-type .rot .ch{opacity:0}
+.js-type .rot .ch.on{opacity:1}
+.rot .ch.caret::after{content:"";position:absolute;right:-.07em;top:.14em;bottom:.04em;width:.045em;border-radius:2px;background:currentColor;animation:blink 1s steps(1) infinite}
+.js-type .rot::after{transform:scaleX(0);transform-origin:left;transition:transform .8s cubic-bezier(.2,.7,.2,1) .1s}
+.js-type .rot.typed::after{transform:none}
+
+/* hover: work experience */
+.xp-card{transition:transform .3s}
+.xp-card:hover{transform:translateY(-4px)}
+.xp-card::after{transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+.xp-card:hover::after{transform:translate(-60px,-50px) scale(1.4)}
+.xp-list>div{border-radius:16px;margin-inline:-12px;padding-inline:12px;transition:background .25s}
+.xp-list>div:hover{background:var(--bg)}
+.xp-list .ic{transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+.xp-list>div:hover .ic{transform:scale(1.14) rotate(-8deg)}
+
+/* hover: education & leadership */
+.box{transition:transform .3s,box-shadow .3s}
+.box:hover{transform:translateY(-4px);box-shadow:0 0 0 1px var(--line),0 24px 40px -26px rgba(30,30,60,.35)}
+.honors span{display:inline-block;transition:transform .3s cubic-bezier(.3,1.6,.5,1)}
+.honors span:hover{transform:translateY(-3px) rotate(-3deg)}
+.big3 div{transition:transform .3s cubic-bezier(.3,1.6,.5,1)}
+.big3 div:hover{transform:translateY(-4px) rotate(-2deg)}
+.box ul li{transition:transform .2s}
+.box ul li:hover{transform:translateX(4px)}
+
+/* scroll reveal: the page assembles as you scroll */
+.js-rv .rv:not(.in){opacity:0}
+.rv.in{animation:var(--a,rv-up) .8s cubic-bezier(.2,.7,.2,1) var(--d,0ms) both}
+@keyframes rv-up{from{opacity:0;translate:0 32px}to{opacity:1;translate:0 0}}
+@keyframes rv-left{from{opacity:0;translate:-56px 0}to{opacity:1;translate:0 0}}
+@keyframes rv-right{from{opacity:0;translate:56px 0}to{opacity:1;translate:0 0}}
+@keyframes rv-drop{from{opacity:0;translate:0 -70px}to{opacity:1;translate:0 0}}
+@keyframes rv-pop{0%{opacity:0;scale:.6}60%{opacity:1;scale:1.06}100%{opacity:1;scale:1}}
+
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   .track{flex-wrap:wrap;width:auto;justify-content:center}
@@ -304,9 +341,9 @@ h2 .serif{font-style:italic;letter-spacing:-.01em}
 
     <!-- 1 · Hero -->
     <div class="hero">
-      <h1>
-        <span class="hi">Hi, I'm</span>
-        <span class="role"><span class="rot">Jeuel Mae Silvio</span></span>
+      <h1 aria-label="Hi, I'm Jeuel Mae Silvio">
+        <span class="hi" aria-hidden="true">Hi, I'm</span>
+        <span class="role" aria-hidden="true"><span class="rot" id="name">Jeuel Mae Silvio</span></span>
       </h1>
       <div class="hero-row">
         <div class="hero-l">
@@ -552,7 +589,7 @@ function runIntro(force){
   const strip=ov.querySelector('.strip'),reel=ov.querySelector('.reel'),fd=ov.querySelectorAll('.fd')[ME],cur=ov.querySelector('.cur'),say=ov.querySelector('.say'),tq=ov.querySelector('.tq');
   const timers=[],T=(ms,f)=>timers.push(setTimeout(f,ms));let done=false;
   function finish(){if(done)return;done=true;timers.forEach(clearTimeout);removeEventListener('keydown',onKey);
-    const a=ov.animate([{opacity:1},{opacity:0}],{duration:380,easing:'ease',fill:'forwards'});a.onfinish=()=>{ov.remove();html.style.overflow=''}}
+    const a=ov.animate([{opacity:1},{opacity:0}],{duration:380,easing:'ease',fill:'forwards'});a.onfinish=()=>{ov.remove();html.style.overflow='';dispatchEvent(new Event('introdone'))}}
   function onKey(e){if(e.key==='Escape'||e.key==='Enter')finish()}
   addEventListener('keydown',onKey);ov.querySelector('.skip').addEventListener('click',finish);
   ov.querySelector('.win').animate([{opacity:0,transform:'translateY(16px) scale(.97)'},{opacity:1,transform:'none'}],{duration:420,easing:'cubic-bezier(.2,.8,.2,1)'});
@@ -573,6 +610,55 @@ function runIntro(force){
   T(4060,finish);
 }
 runIntro(false);
+
+/* hero name: typed in once the intro has finished */
+(function(){
+  const el=$('name');
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const txt=el.textContent;
+  document.documentElement.classList.add('js-type');
+  el.innerHTML=[...txt].map(c=>`<span class="ch">${esc(c)}</span>`).join('');
+  const chs=[...el.querySelectorAll('.ch')];
+  function go(){let i=0;
+    const step=()=>{if(i>0)chs[i-1].classList.remove('caret');
+      if(i>=chs.length){const last=chs[chs.length-1];last.classList.add('caret');el.classList.add('typed');setTimeout(()=>last.classList.remove('caret'),2600);return}
+      chs[i].classList.add('on','caret');i++;setTimeout(step,chs[i-1].textContent===' '?140:55+Math.random()*70)};
+    setTimeout(step,250)}
+  if(document.querySelector('.intro'))addEventListener('introdone',go,{once:true});else go();
+})();
+
+/* scroll reveal: each part animates in the first time it scrolls into view */
+(function(){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches||!('IntersectionObserver' in window))return;
+  document.documentElement.classList.add('js-rv');
+  const roots=new Map();
+  const G=(root,sel,anim,step=0,base=0)=>{const r=typeof root==='string'?document.querySelector(root):root;if(!r)return;
+    const items=sel?[...r.querySelectorAll(sel)]:[r];
+    items.forEach((el,i)=>{el.classList.add('rv');el.style.setProperty('--a',anim);el.style.setProperty('--d',(base+i*step)+'ms')});
+    roots.set(r,(roots.get(r)||[]).concat(items));};
+  document.querySelectorAll('section').forEach(sec=>G(sec,':scope > .eyebrow, :scope > h2','rv-up',90));
+  G('#projects .pintro',':scope > *','rv-up',90);
+  G('.xp-card',null,'rv-left');
+  G('#xp',':scope > div','rv-right',90,120);
+  G('#stack',':scope > .card','rv-drop',150);
+  G('#kb',':scope > .kb-top','rv-up');
+  G('#kb','.key','rv-pop',20,150);
+  G('.about',':scope > .box','rv-up',140);
+  document.querySelectorAll('.honors').forEach(h=>G(h,'span','rv-pop',70,250));
+  document.querySelectorAll('.big3').forEach(b=>G(b,':scope > div','rv-pop',100,250));
+  G('#certs',':scope > .cert','rv-pop',110);
+  G('#ints',':scope > .int','rv-pop',110);
+  G('#connect',':scope > h2, :scope > p, :scope > .hbtns','rv-up',120);
+  function count(b,delay){const m=b.textContent.match(/^(\D*)([\d.]+)(\D*)$/);if(!m)return;const end=+m[2];
+    b.textContent=m[1]+'0'+m[3];setTimeout(()=>{const t0=performance.now();
+      const tick=t=>{const k=Math.min(1,(t-t0)/900),v=Math.round(end*(1-Math.pow(1-k,3)));b.textContent=m[1]+v+m[3];if(k<1)requestAnimationFrame(tick)};
+      requestAnimationFrame(tick)},delay)}
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;
+    (roots.get(e.target)||[]).forEach(el=>el.classList.add('in'));
+    if(e.target.classList.contains('big3'))e.target.querySelectorAll('b').forEach((b,i)=>count(b,250+i*100));
+    io.unobserve(e.target)}),{rootMargin:'0px 0px -10% 0px',threshold:0});
+  roots.forEach((_,r)=>io.observe(r));
+})();
 </script>
 </body>
 </html>
