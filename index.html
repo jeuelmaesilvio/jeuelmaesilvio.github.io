@@ -304,9 +304,9 @@ h2 .serif{font-style:italic;letter-spacing:-.01em}
 
     <!-- 1 · Hero -->
     <div class="hero">
-      <h1 aria-label="Hi, I'm Jeuel. Software, automation and AI engineer.">
-        <span class="hi" aria-hidden="true">Hi, I'm Jeuel</span>
-        <span class="role" aria-hidden="true"><span class="rot" id="rot">Software</span> Engineer</span>
+      <h1>
+        <span class="hi">Hi, I'm</span>
+        <span class="role"><span class="rot">Jeuel Mae Silvio</span></span>
       </h1>
       <div class="hero-row">
         <div class="hero-l">
@@ -489,9 +489,6 @@ const INTS=[
 /* hero */
 const tools=["Make.com","n8n","React","Flutter","Node.js","Langdock","SmartSuite","Firebase","PHP","MySQL","Shopify","Figma"];
 $('track').innerHTML=[...tools,...tools].map((t,i)=>`<span style="--c:${P(i)}"${i>=tools.length?' aria-hidden="true"':''}>${t}</span>`).join('');
-(function(){const words=["Software","Automation","AI"],el=$('rot');let i=0;
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches){el.textContent="Software & Automation";return}
-  setInterval(()=>{el.classList.add('out');setTimeout(()=>{i=(i+1)%words.length;el.textContent=words[i];el.classList.remove('out')},350)},2600);})();
 
 /* sections */
 $('xp').innerHTML=XP.map((x,i)=>`<div><span class="ic" style="--c:${P(i)}">${svg(x.i)}</span><div><b>${esc(x.h)}</b><span>${esc(x.d)}</span></div></div>`).join('');
@@ -544,10 +541,10 @@ function runIntro(force){
   if(document.querySelector('.intro'))return;
   const labels=["Resumes","Shortlist","Designers","Interviews","Q3 Hiring","Frontend","Data Team","Applicants","Backend","AI Team","Portfolio_v2","Jeuel Mae Silvio","Archive","Misc"],ME=11;
   const ov=document.createElement('div');ov.className='intro';ov.setAttribute('role','presentation');
-  ov.innerHTML=`<div class="win"><div class="win-bar"><i></i><i></i><i></i><span class="path">Candidates / Engineering</span>
+  ov.innerHTML=`<div class="win"><div class="win-bar"><i></i><i></i><i></i><span class="path">Portfolios</span>
     <span class="srch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><b class="tq"></b></span></div>
     <div class="reel"><div class="strip">${labels.map((l,i)=>`<div class="fd${i===ME?' me':''}" style="--c:${P(i)}"><div class="shape"><div class="back"></div><div class="paper"></div><div class="front"></div></div><span>${l}</span></div>`).join('')}</div></div></div>
-    <p class="say">Looking for the right engineer…</p>
+    <p class="say">Browsing portfolios…</p>
     <div class="cur"><svg viewBox="0 0 24 24"><path d="M4 2l15 11.5-6.6.9 3.8 7.4-2.9 1.4-3.7-7.5L4 20z" fill="#131316" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
     <button class="skip" type="button">Skip intro →</button>`;
   document.body.appendChild(ov);
@@ -566,7 +563,7 @@ function runIntro(force){
   T(2150,()=>{const r=fd.querySelector('.shape').getBoundingClientRect();
     cur.animate([{transform:cur.style.transform},{transform:`translate(${r.left+r.width*.55}px,${r.top+r.height*.5}px)`}],{duration:650,easing:'cubic-bezier(.4,0,.2,1)',fill:'forwards'})});
   const click=()=>{cur.classList.add('click');setTimeout(()=>cur.classList.remove('click'),110)};
-  T(2850,()=>{click();fd.classList.add('sel');say.textContent='Found one.'});
+  T(2850,()=>{click();fd.classList.add('sel');say.textContent='Here’s mine.'});
   T(3070,()=>{click();fd.classList.add('open');say.textContent='Opening Jeuel_Mae_Silvio…'});
   T(3420,()=>{const r=fd.querySelector('.shape').getBoundingClientRect(),z=document.createElement('div');z.className='zoom';
     Object.assign(z.style,{left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px',borderRadius:'10px',background:getComputedStyle(fd.querySelector('.front')).backgroundImage});
