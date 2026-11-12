@@ -184,7 +184,8 @@ h2 .serif{font-style:italic;letter-spacing:-.01em}
 .card-in p{margin:0 0 10px;font-size:15px;line-height:1.55;max-width:60ch}
 .card-in ul{margin:0 0 14px;padding-left:18px;font-size:14px;line-height:1.55}
 .card-in li{margin-bottom:4px}
-.more{margin-top:16px;display:inline-flex;align-items:center;gap:8px;border:0;background:var(--ink);color:#fff;font:700 13.5px var(--sans);padding:10px 16px;border-radius:999px;cursor:pointer;transition:gap .25s,transform .2s}
+.card-foot{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px}
+.more{margin-left:auto;flex-shrink:0;display:inline-flex;align-items:center;gap:8px;border:0;background:var(--ink);color:#fff;font:700 13.5px var(--sans);padding:10px 16px;border-radius:999px;cursor:pointer;transition:gap .25s,transform .2s}
 .more:hover{gap:13px;transform:translateY(-1px)}
 .pm{position:fixed;inset:0;z-index:90;display:grid;place-items:center;background:rgba(20,20,32,.5);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:20px max(16px,env(safe-area-inset-right,0px)) 20px max(16px,env(safe-area-inset-left,0px))}
 .pm-panel{background:#fff;border-radius:28px;width:min(640px,100%);max-height:88vh;overflow:auto;box-shadow:0 40px 80px -30px rgba(0,0,0,.45);animation:pm-in .45s cubic-bezier(.2,.8,.2,1)}
@@ -272,15 +273,20 @@ h2 .serif{font-style:italic;letter-spacing:-.01em}
 .big3 span{display:block;font-size:12px;color:#3d3d45;margin-top:6px;line-height:1.3}
 
 /* certifications */
-.certs{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:14px}
+.certs{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+@media (min-width:720px){.certs{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .cert{background:#fff;border:0;font:inherit;color:inherit;text-align:left;cursor:pointer;width:100%;border-radius:24px;padding:22px;box-shadow:0 0 0 1px var(--line);display:flex;gap:16px;align-items:center;transition:transform .2s,box-shadow .2s}
 .cert:hover{transform:translateY(-3px);box-shadow:0 0 0 1px var(--line),0 18px 30px -20px rgba(30,30,60,.35)}
 .cert .ct{min-width:0}
 .cert em{display:block;font-style:normal;font-size:13px;font-weight:700;margin-top:10px;color:var(--ink)}
 .lb{position:fixed;inset:0;z-index:90;display:grid;place-items:center;background:rgba(20,20,32,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:20px max(16px,env(safe-area-inset-right,0px)) 20px max(16px,env(safe-area-inset-left,0px))}
-.lb-panel{background:#fff;border-radius:24px;width:min(760px,100%);max-height:90vh;overflow:auto;padding:14px;box-shadow:0 40px 80px -30px rgba(0,0,0,.45)}
-.lb-img{aspect-ratio:4/3;max-width:100%;border-radius:16px;background:var(--bg);display:grid;place-items:center;overflow:hidden}
-.lb-img img{width:100%;height:100%;object-fit:contain}
+.lb-panel{background:#fff;border-radius:24px;width:min(980px,100%);max-height:90vh;overflow:auto;padding:14px;box-shadow:0 40px 80px -30px rgba(0,0,0,.45)}
+.lb-img{max-width:100%;border-radius:16px;background:var(--bg);display:grid;place-items:center;overflow:hidden;min-height:200px}
+.lb-img img{display:block;width:100%;height:auto;max-height:70vh;object-fit:contain}
+.lb-tabs{display:flex;gap:6px;flex-wrap:wrap;padding:12px 8px 0}
+.lb-tabs:empty{display:none}
+.lb-tabs button{border:0;background:var(--bg);box-shadow:0 0 0 1px var(--line);border-radius:999px;padding:8px 14px;font:600 13px var(--sans);cursor:pointer}
+.lb-tabs button[aria-pressed="true"]{background:var(--ink);color:#fff;box-shadow:none}
 .lb-ph{display:grid;justify-items:center;gap:10px;text-align:center;padding:20px}
 .lb-ph b{font-size:18px;letter-spacing:-.015em}
 .lb-ph small{color:var(--muted);font-size:13.5px}
@@ -351,10 +357,6 @@ h2 .serif{font-style:italic;letter-spacing:-.01em}
 @keyframes rv-drop{from{opacity:0;translate:0 -70px}to{opacity:1;translate:0 0}}
 @keyframes rv-pop{0%{opacity:0;scale:.6}60%{opacity:1;scale:1.06}100%{opacity:1;scale:1}}
 
-@media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation:none!important;transition:none!important}
-  .track{flex-wrap:wrap;width:auto;justify-content:center}
-}
 </style>
 </head>
 <body>
@@ -553,10 +555,11 @@ const SKILLS=[
  {g:"How I work",soft:1,i:["Problem-solving","Time management","Collaborative leadership","Learning agility","Resilience"]}
 ];
 const CERTS=[
- /* img: set to the certificate picture's path (e.g. "certs/cisco.jpg") once you have it */
- {n:"Cisco Networking Basics",by:"Cisco",d:"September 2026",img:null},
- {n:"SmartSuite Consultant Certification",by:"SmartSuite",d:"February 2026",img:null},
- {n:"Make Simplified Accelerator",by:"Make",d:"February 2026",img:null}
+ /* imgs: one or more pictures per certificate, shown in the viewer */
+ {n:"Network Support and Security",by:"Cisco Networking Academy",d:"September 2026",imgs:[["certs/cisco-network-support-security-1.jpg","Certificate"],["certs/cisco-network-support-security-2.jpg","Course completion"]]},
+ {n:"Networking Basics",by:"Cisco Networking Academy",d:"September 2026",imgs:[["certs/cisco-networking-basics-1.jpg","Certificate"],["certs/cisco-networking-basics-2.jpg","Course completion"]]},
+ {n:"SmartSuite Consultant Certification",by:"SmartSuite",d:"March 2026",imgs:[["certs/smartsuite-consultant.jpg","Certificate"]]},
+ {n:"Make Simplified Accelerator",by:"Make",d:"February 2026",imgs:[["certs/make-accelerator.jpg","Certificate"]]}
 ];
 const INTS=[
  {n:"Sudoku",d:"",i:"sudoku"},
@@ -571,15 +574,19 @@ $('track').innerHTML=[...tools,...tools].map((t,i)=>`<span style="--c:${P(i)}"${
 
 /* sections */
 $('xp').innerHTML=XP.map((x,i)=>`<div><span class="ic" style="--c:${P(i)}">${svg(x.i)}</span><div><b>${esc(x.h)}</b><span>${esc(x.d)}</span></div></div>`).join('');
-$('certs').innerHTML=CERTS.map((c,i)=>`<button class="cert" type="button" data-cert="${i}" aria-haspopup="dialog"><span class="medal" style="--c:${P(i)}"><span>${esc(c.by[0])}</span></span><span class="ct"><b>${esc(c.n)}</b><small>${esc(c.by)} · ${c.d}</small><em>View certificate →</em></span></button>`).join('');
+$('certs').innerHTML=CERTS.map((c,i)=>`<button class="cert" type="button" data-cert="${i}" aria-haspopup="dialog"><span class="medal" style="--c:${P(i)}"><span>${esc(c.by[0])}</span></span><span class="ct"><b>${esc(c.n)}</b><small>${esc(c.by)} · ${c.d}</small><em>${c.imgs.length>1?`View ${c.imgs.length} certificates →`:'View certificate →'}</em></span></button>`).join('');
 /* certificate viewer */
 (function(){const lb=document.createElement('div');lb.className='lb';lb.hidden=true;lb.setAttribute('role','dialog');lb.setAttribute('aria-modal','true');lb.setAttribute('aria-label','Certificate');
-  lb.innerHTML=`<div class="lb-panel"><div class="lb-img" id="lb-img"></div><div class="lb-cap"><div><b id="lb-t"></b><small id="lb-s"></small></div><button class="lb-close" type="button">Close</button></div></div>`;
+  lb.innerHTML=`<div class="lb-panel"><div class="lb-img" id="lb-img"></div><div class="lb-tabs" id="lb-tabs"></div><div class="lb-cap"><div><b id="lb-t"></b><small id="lb-s"></small></div><button class="lb-close" type="button">Close</button></div></div>`;
   document.body.appendChild(lb);let back=null;
   const close=()=>{lb.hidden=true;document.documentElement.style.overflow='';if(back)back.focus()};
   $('certs').addEventListener('click',e=>{const b=e.target.closest('[data-cert]');if(!b)return;const c=CERTS[+b.dataset.cert],i=+b.dataset.cert;back=b;
     $('lb-t').textContent=c.n;$('lb-s').textContent=`${c.by} · ${c.d}`;
-    $('lb-img').innerHTML=c.img?`<img src="${esc(c.img)}" alt="${esc(c.n)} certificate">`:`<div class="lb-ph"><span class="medal" style="--c:${P(i)}"><span>${esc(c.by[0])}</span></span><b>${esc(c.n)}</b><small>The certificate picture will appear here.</small></div>`;
+    const show=k=>{$('lb-img').innerHTML=`<img src="${esc(c.imgs[k][0])}" alt="${esc(c.n)}: ${esc(c.imgs[k][1])}">`;
+      $('lb-tabs').querySelectorAll('button').forEach((t,j)=>t.setAttribute('aria-pressed',j===k))};
+    $('lb-tabs').innerHTML=c.imgs.length>1?c.imgs.map((m,k)=>`<button type="button" data-k="${k}">${esc(m[1])}</button>`).join(''):'';
+    $('lb-tabs').onclick=e=>{const t=e.target.closest('[data-k]');if(t)show(+t.dataset.k)};
+    show(0);
     lb.hidden=false;document.documentElement.style.overflow='hidden';lb.querySelector('.lb-close').focus()});
   lb.addEventListener('click',e=>{if(e.target===lb||e.target.closest('.lb-close'))close()});
   addEventListener('keydown',e=>{if(e.key==='Escape'&&!lb.hidden)close()});})();
@@ -589,7 +596,6 @@ $('kb').insertAdjacentHTML('beforeend',SKILLS.map((s,i)=>`<div class="krow${s.so
   <span class="key lab">${esc(s.g)}<small>${s.i.length}</small></span>${s.i.map(x=>`<span class="key" role="listitem">${esc(x)}</span>`).join('')}</div>`).join(''));
 (function(){const keys=[...document.querySelectorAll('#kb .krow .key:not(.lab):not(.space)')],typed=$('typed');
   keys.forEach(k=>k.addEventListener('mouseenter',()=>typed.textContent=k.textContent));
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   setInterval(()=>{if(document.hidden)return;const k=keys[Math.floor(Math.random()*keys.length)];k.classList.add('down');typed.textContent=k.textContent;setTimeout(()=>k.classList.remove('down'),160)},1300);})();
 
 /* projects stack */
@@ -597,9 +603,9 @@ const stack=$('stack');
 stack.innerHTML=PROJECTS.map((p,i)=>`<article class="card${i===0?' open':''}${i===PROJECTS.length-1?' last':''}" style="--c:${P(i)}" data-i="${i}">
   <button class="card-head" aria-expanded="${i===0}"><div><small>${esc(p.org)}</small><h3>${esc(p.t)}</h3></div>
   <div class="metric"><b>${p.m}</b><span>${esc(p.ml)}</span></div></button>
-  <div class="card-body"><div><div class="card-in"><p>${esc(p.s)}</p>
-  <div class="tags">${p.tg.map(x=>`<span>${esc(x)}</span>`).join('')}</div>
-  <button class="more" type="button" data-proj="${i}" aria-haspopup="dialog">See more <span aria-hidden="true">→</span></button></div></div></div></article>`).join('');
+  <div class="card-body"><div><div class="card-in"><p>${esc(p.s)}</p><ul>${p.p.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
+  <div class="card-foot"><div class="tags">${p.tg.map(x=>`<span>${esc(x)}</span>`).join('')}</div>
+  <button class="more" type="button" data-proj="${i}" aria-haspopup="dialog">See more <span aria-hidden="true">→</span></button></div></div></div></div></article>`).join('');
 /* project details pop-up */
 (function(){const pm=document.createElement('div');pm.className='pm';pm.hidden=true;pm.setAttribute('role','dialog');pm.setAttribute('aria-modal','true');pm.setAttribute('aria-labelledby','pm-t');
   pm.innerHTML=`<div class="pm-panel"><div class="pm-head"><div><small id="pm-org"></small><h3 id="pm-t"></h3><span class="pm-role" id="pm-r"></span></div>
@@ -628,8 +634,7 @@ function sel(el){const r=document.createRange();r.selectNodeContents(el);const s
 
 /* intro: a window of folders scrolls, the cursor double-clicks Jeuel's, and it opens into the page */
 function runIntro(force){
-  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(reduce&&!force)return;
+  const reduce=false;
   let seen=false;try{seen=sessionStorage.getItem('jm-intro')==='1'}catch(_){}
   if(seen&&!force)return;try{sessionStorage.setItem('jm-intro','1')}catch(_){}
   if(document.querySelector('.intro'))return;
@@ -683,7 +688,6 @@ runIntro(false);
 /* hero name: typed in once the intro has finished */
 (function(){
   const el=$('name');
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   const txt=el.textContent;
   document.documentElement.classList.add('js-type');
   el.innerHTML=[...txt].map(c=>`<span class="ch">${esc(c)}</span>`).join('');
@@ -698,7 +702,7 @@ runIntro(false);
 
 /* scroll reveal: each part animates in the first time it scrolls into view */
 (function(){
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches||!('IntersectionObserver' in window))return;
+  if(!('IntersectionObserver' in window))return;
   document.documentElement.classList.add('js-rv');
   const roots=new Map();
   const G=(root,sel,anim,step=0,base=0)=>{const r=typeof root==='string'?document.querySelector(root):root;if(!r)return;
